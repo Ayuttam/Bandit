@@ -1,0 +1,138 @@
+Ayuttam Abhiram Bandit writeup
+
+level 0, login using website data.
+Use command ssh bandit0@bandit.labs.overthewire.org -p 2220
+password is bandit0
+use command ls to look for files present, we see readme
+use command cat to read the text in the file, which is password for level 1
+boJ9jbbUNNfktd78OOpsqOltutMc3MY1
+
+level 1, login using same ssh command and use password from previous level. 
+ls gives us ‘-’ as file name.
+Use cat ./- to access the file, and get pass for level 2
+CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9
+
+level 2, use pass and login, 
+ls gives us filename “spaces in this filename”
+type cat “spa” and just press tab key. It autocompletes it to 
+cat spaces\ in\ this\ filename
+or you can put spaces in this filename within “  double quotes”
+UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
+
+level 3, use pass and login
+use ls, we see a blue name ‘inhere’, a directory.
+Use cd inhere/ to move to the directory inhere
+using ls does not show us a file name.
+Use ‘ls -la’ to view hidden files
+use cat ./.hidden to access the hidden file “.hidden”
+pIwrPrtPN36QITSp3EQaw936yaFoFgAB
+
+level 4, use pass and login
+ls gives us inhere directory, cd inhere/ takes us in  the directory
+ls -la shows multiple hidden files
+we can try using cat./ and read all files 1 by one, which is long
+we use file ./* to see all file types and we see only 07 has ASCII text
+koReBOKuIDDepwhWk7jZC0RTdopnAYKh
+
+level 5, use pass and login
+naigate through inhere directory.
+We see too many directories.
+Search using find . -size 1033c
+we locate file and read it to get the pass
+DxjZPULLxYr17uwoI01bNLQbtFemEgo7
+
+level 6, login 
+we need to run a search. We know owned by user bandit7, and group bandit6, size 33kb
+find / -user bandit7 -group bandit6 -size 33c
+search for the filename ending in bandit7.password and get pass
+HKBPTKQnIay4Fw76bEy8PVxKEDQRKTzs
+
+
+
+level 7, login
+ls gives us data.txt, which is too big a file to rearch for the password manually.
+We use command cat data.txt | grep millionth to locate our password
+cvX2JJa4CFALtqS87jk27qwqGhBM9plV
+level 8 
+we sort to get the only line of text that appears once
+less data.txt | sort -s | less
+UsvVyFSfZZWbi6wgC7dAFyFuR6jQQUhR
+level 9
+pass contains few = signs before it.
+strings data.txt | grep “=”
+truKLdjsbJ5g7yyJ2X2R0o3a5HQJFuLk
+
+level 10
+we need to decode a base 64 encoded data.txt file to get the pass
+cat data.txt gives us VghlIHBhc3N3b3JkIGlzIElGdWt3S0dzRlc4TU9xM0lSRnFyeEUxaHhUTkViVVBSCg==
+we type 
+echo VghlIHBhc3N3b3JkIGlzIElGdWt3S0dzRlc4TU9xM0lSRnFyeEUxaHhUTkViVVBSCg== | base64 –decode
+we get The password is IfukwKGsFW8MOq3IRFqrxE1hxTNEbUPR
+IfukwKGsFW8MOq3IRFqrxE1hxTNEbUPR
+
+level 11
+all letters have been rotated by 13. 
+we use cat data.txt | tr ‘a-zA-Z’ ‘n-za-mN-ZA-M’
+The password is 5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu
+5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu
+
+level 12
+cd /tmp
+mkdir bandit1+2
+cd bandit1+2
+cp ~/
+cp ~/data.txt
+xdd -r data.txt > data
+ls
+rm data.txt
+file data
+mv data data.gz
+gzip =d data.gz
+ls
+file data
+mv data data.bz2
+bzip2 -d data.bz2
+ls
+file data
+mv data data.gz
+gzip -d data.gz
+ls
+file data
+mv data data.tar
+tar -xf data.tar
+ls
+rm data.tar
+file data5.bin
+mv data5.bin data5.tar
+tar -xf data5.tar
+ls
+file data6.bin
+mv data6.bin data.bz2
+bzip2 -d data.bz2
+ls
+rm data.tar
+file data
+mv data data.tar
+tar -xf data.tar
+ls
+file data8.bin
+mv data8.bin data.gz
+gzip -d data.gz
+ls
+file data
+cat data
+The password is 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
+8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
+
+(holy shit xD)
+
+level 13, use pass and login 
+we use the provided sshkey and login to the local host by using .private key
+ssh -i sshkey.private bandit14@localhost
+cat etcbandit_pass/bandit14
+4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e
+
+level 14
+login through port 30000 to the localhost
+we use cat etc/bandit_pass/bandit14 | nc localhost 30000
+we get Correct! BfMYroe26WYalil77FoDi9qh59eK5xNr
